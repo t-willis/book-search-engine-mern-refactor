@@ -13,3 +13,6 @@ function App() {
 }
 
 export default App;
+
+// Additionally, you’ll need to complete the following tasks in each of these front-end files:
+// App.jsx: Create an Apollo Provider to make every request work with the Apollo Server.

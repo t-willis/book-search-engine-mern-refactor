@@ -42,7 +42,7 @@ const resolvers = {
                     .populate('books');
                 return updatedUser;
             };
-            throw new AuthenticationError('You must be logged in to do that!');
+            throw AuthenticationError;
         },
         removeBook: async (parent, { bookId }, context) => {
             if (context.user) {
@@ -53,7 +53,7 @@ const resolvers = {
                 );
                 return updatedUser;
             };
-            throw new AuthenticationError('You must be logged in to do that!');
+            throw AuthenticationError;
         },
     },
 };
