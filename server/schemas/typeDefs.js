@@ -5,7 +5,7 @@ const typeDefs = gql`
         _id: ID
         username: String
         email: String
-        bookCount: Boolean
+        bookCount: Int
         savedBooks: [Book]
     },
 
@@ -24,7 +24,7 @@ const typeDefs = gql`
     },
 
     type Query {
-        me: User
+        me(username: String!): User
     },
 `;
 
