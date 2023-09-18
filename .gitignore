@@ -1,3 +1,6 @@
+# Custom Ignores
+TODOS.js
+
 # Logs
 logs
 *.log
