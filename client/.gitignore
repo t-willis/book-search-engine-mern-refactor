@@ -1,3 +1,6 @@
+# Custom Ignores
+test.json
+
 # Logs
 logs
 *.log

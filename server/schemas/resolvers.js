@@ -38,8 +38,7 @@ const resolvers = {
                         { _id: context.user._id },
                         { $addToSet: { savedBooks: bookData } },
                         { new: true },
-                    )
-                    .populate('books');
+                    );
                 return updatedUser;
             };
             throw AuthenticationError;
