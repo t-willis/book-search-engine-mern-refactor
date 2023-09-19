@@ -11,9 +11,9 @@ import { useMutation } from '@apollo/client';
 import { SAVE_BOOK } from '../utils/mutations';
 
 import Auth from '../utils/auth';
-// import { searchGoogleBooks } from '../utils/API';
+import { searchGoogleBooks } from '../utils/API'; // Comment out when query-limit hits
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
-import jsonData from './test.json';
+// import jsonData from './test.json'; // Uncomment when query-limit hits
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -40,14 +40,14 @@ const SearchBooks = () => {
     }
 
     try {
-      // const response = await searchGoogleBooks(searchInput);
+      const response = await searchGoogleBooks(searchInput);
 
-      // if (!response.ok) {
-      //   throw new Error('something went wrong!');
-      // }
+      if (!response.ok) {
+        throw new Error('something went wrong!');
+      }
 
-      // const { items } = await response.json();
-      const { items } = jsonData;
+      const { items } = await response.json(); // comment out when query limit hits
+      // const { items } = jsonData; // uncomment when query limit
 
       const bookData = items.map((book) => ({
         bookId: book.id,
@@ -68,7 +68,7 @@ const SearchBooks = () => {
   const handleSaveBook = async (bookId) => {
     // find the book in `searchedBooks` state by the matching id
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
-
+  
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -79,6 +79,7 @@ const SearchBooks = () => {
     try {
       // DO THINGS HERE
       const response = await saveBook({
+        // bookId: bookToSave.bookId,
         variables: { ...bookToSave },
         token: token,
       });
@@ -87,7 +88,8 @@ const SearchBooks = () => {
         throw new Error('something went wrong!');
       }
 
-      console.log(response);
+      console.log('SAVE_BOOK Data:', response);
+      console.log('bookToSave.bookId:', bookToSave.bookId);
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
