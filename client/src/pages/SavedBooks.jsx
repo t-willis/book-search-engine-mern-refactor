@@ -7,7 +7,7 @@ import {
   Col
 } from 'react-bootstrap';
 
-import { getMe, deleteBook } from '../utils/API';
+import { getMe, deleteBook } from '../utils/API'; // will comment out eventually i think
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
@@ -21,11 +21,13 @@ const SavedBooks = () => {
     const getUserData = async () => {
       try {
         const token = Auth.loggedIn() ? Auth.getToken() : null;
-
+        
         if (!token) {
           return false;
         }
-
+        
+        // REMOVE THIS HOOK MAYBE
+        // Replace with GET_ME query on load and save to variable named userData
         const response = await getMe(token);
 
         if (!response.ok) {
@@ -50,6 +52,8 @@ const SavedBooks = () => {
       return false;
     }
 
+    // Replace this with REMOVE_BOOK in useMutation()
+    // KEEP removeBookId(), that's the localStorage stuff
     try {
       const response = await deleteBook(bookId, token);
 

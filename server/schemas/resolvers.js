@@ -33,7 +33,7 @@ const resolvers = {
         },
         saveBook: async (parent, bookData, context) => {
             if (context.user) {
-                console.log(bookData);
+                console.log('bookData in server/schemas/resolvers.js: ', bookData);
                 return User
                     .findOneAndUpdate(
                         { _id: context.user._id },
