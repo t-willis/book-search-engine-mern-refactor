@@ -11,9 +11,9 @@ import { useMutation } from '@apollo/client';
 import { SAVE_BOOK } from '../utils/mutations';
 
 import Auth from '../utils/auth';
-// import { searchGoogleBooks } from '../utils/API'; // Comment out when query-limit hits
+import { searchGoogleBooks } from '../utils/API'; // Comment out when query-limit hits
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
-import jsonData from './test.json'; // Uncomment when query-limit hits
+// import jsonData from './test.json'; // Uncomment when query-limit hits
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -40,13 +40,13 @@ const SearchBooks = () => {
     }
 
     try {
-      // const response = await searchGoogleBooks(searchInput); // comment out when query limit hits
-      // if (!response.ok) { // comment out when query limit hits
-      //   throw new Error('something went wrong!'); // comment out when query limit hits
-      // } // comment out when query limit hits
-      // const { items } = await response.json(); // comment out when query limit hits
+      const response = await searchGoogleBooks(searchInput); // comment out when query limit hits
+      if (!response.ok) { // comment out when query limit hits
+        throw new Error('something went wrong! If you have a 429 error from the GET it may be Google Books API query limit'); // comment out when query limit hits
+      } // comment out when query limit hits
+      const { items } = await response.json(); // comment out when query limit hits
 
-      const { items } = jsonData; // uncomment when query limit
+      // const { items } = jsonData; // uncomment when query limit
 
       const bookData = items.map((book) => ({
         bookId: book.id,
@@ -78,7 +78,6 @@ const SearchBooks = () => {
     try {
       // DO THINGS HERE
       const response = await saveBook({
-        // bookId: bookToSave.bookId,
         variables: { ...bookToSave },
         token: token,
       });
