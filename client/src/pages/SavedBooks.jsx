@@ -88,7 +88,7 @@ const SavedBooks = () => {
   };
 
   // if data isn't here yet, say so
-  if (userData.data.loading === true) {
+  if (userData.loading === true) {
     return <h2>LOADING...</h2>;
   }
 
