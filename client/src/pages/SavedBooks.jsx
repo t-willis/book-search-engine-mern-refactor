@@ -7,42 +7,61 @@ import {
   Col
 } from 'react-bootstrap';
 
-import { getMe, deleteBook } from '../utils/API'; // will comment out eventually i think
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
+import { useQuery, useMutation } from '@apollo/client';
+import { GET_ME } from '../utils/queries';
+import { REMOVE_BOOK } from '../utils/mutations';
+
+// import { getMe, deleteBook } from '../utils/API';
 
 const SavedBooks = () => {
-  const [userData, setUserData] = useState({});
+  let [userData, setUserData] = useState({});
+  const token = Auth.loggedIn() ? Auth.getToken() : null; // might not need token, well see./
 
   // use this to determine if `useEffect()` hook needs to run again
-  const userDataLength = Object.keys(userData).length;
+  // const userDataLength = Object.keys(userData).length;
 
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const token = Auth.loggedIn() ? Auth.getToken() : null;
-        
-        if (!token) {
-          return false;
-        }
-        
-        // REMOVE THIS HOOK MAYBE
-        // Replace with GET_ME query on load and save to variable named userData
-        const response = await getMe(token);
+  userData = useQuery(GET_ME, {
+    variables: { username: Auth.getProfile(token).data.username },
+  });
 
-        if (!response.ok) {
-          throw new Error('something went wrong!');
-        }
+  // setUserData(userData);
+  // console.log('test: ', userData.savedBooks);
+  console.log('Auth.getProfile: ', Auth.getProfile(token).data.username);
+  // const savedBooks = userData.data.me.savedBooks;
+  // console.log(savedBooks);
 
-        const user = await response.json();
-        setUserData(user);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  
 
-    getUserData();
-  }, [userDataLength]);
+  // const userData = data;
+  console.log('USERDATA: ', userData);
+
+  // useEffect(() => {
+
+  //   const getUserData = async () => {
+  //     try {
+  //       const token = Auth.loggedIn() ? Auth.getToken() : null;
+
+  //       if (!token) {
+  //         return false;
+  //       }
+
+  //       const response = await getMe(token);
+
+  //       if (!response.ok) {
+  //         throw new Error('something went wrong!');
+  //       }
+
+  //       const user = await response.json();
+  //       setUserData(user);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+
+  //   getUserData();
+  // }, [userDataLength]);
 
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
@@ -52,8 +71,6 @@ const SavedBooks = () => {
       return false;
     }
 
-    // Replace this with REMOVE_BOOK in useMutation()
-    // KEEP removeBookId(), that's the localStorage stuff
     try {
       const response = await deleteBook(bookId, token);
 
@@ -71,7 +88,7 @@ const SavedBooks = () => {
   };
 
   // if data isn't here yet, say so
-  if (!userDataLength) {
+  if (userData.data.loading === true) {
     return <h2>LOADING...</h2>;
   }
 
@@ -84,15 +101,15 @@ const SavedBooks = () => {
       </div>
       <Container>
         <h2 className='pt-5'>
-          {userData.savedBooks.length
-            ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
+          {userData.data.me.savedBooks.length
+            ? `Viewing ${userData.data.me.savedBooks.length} saved ${userData.data.me.savedBooks.length === 1 ? 'book' : 'books'}:`
             : 'You have no saved books!'}
         </h2>
         <Row>
-          {userData.savedBooks.map((book) => {
+          {userData.data.me.savedBooks.map((book) => {
             return (
               <Col key={book.bookId} md="4">
-                <Card  border='dark'>
+                <Card border='dark'>
                   {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}
                   <Card.Body>
                     <Card.Title>{book.title}</Card.Title>
