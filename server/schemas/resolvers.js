@@ -1,4 +1,4 @@
-const { User, Book } = require('../models');
+const { User } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 const resolvers = {
@@ -40,18 +40,19 @@ const resolvers = {
                         { $addToSet: { savedBooks: bookData } },
                         { new: true },
                     );
-
             };
             throw AuthenticationError;
         },
-        removeBook: async (parent, { bookId }, context) => {
+        removeBook: async (parent, {bookId}, context) => {
+            console.log(context.user._id);
+            console.log(bookId);
             if (context.user) {
-                const updatedUser = await User.findByIdAndUpdate(
-                    { _id: context.user._id },
-                    { $pull: { savedBooks: { bookId: bookId } } },
-                    { new: true },
-                );
-                return updatedUser;
+                return updatedUser = await User
+                    .findOneAndUpdate(
+                        { _id: context.user._id },
+                        { $pull: { savedBooks: { bookId: bookId } } },
+                        { new: true },
+                    );
             };
             throw AuthenticationError;
         },

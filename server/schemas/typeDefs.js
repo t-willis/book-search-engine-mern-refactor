@@ -40,7 +40,7 @@ const typeDefs = gql`
             image: String, 
             link: String
             ): User
-        removeBook(_id: ID!): User
+        removeBook(bookId: String!): User
     }
 `;
 
