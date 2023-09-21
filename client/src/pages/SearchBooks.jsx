@@ -41,12 +41,11 @@ const SearchBooks = () => {
 
     try {
       // const response = await searchGoogleBooks(searchInput); // comment out when query limit hits
-
       // if (!response.ok) { // comment out when query limit hits
       //   throw new Error('something went wrong!'); // comment out when query limit hits
       // } // comment out when query limit hits
-
       // const { items } = await response.json(); // comment out when query limit hits
+
       const { items } = jsonData; // uncomment when query limit
 
       const bookData = items.map((book) => ({
@@ -88,12 +87,9 @@ const SearchBooks = () => {
         throw new Error('something went wrong!');
       }
 
-      console.log('SAVE_BOOK Data:', response);
-      console.log('bookToSave.bookId:', bookToSave.bookId);
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
-      console.log('BOOKTOSAVE FROM CATCH ERR', bookToSave);
       console.error(err);
     }
   };

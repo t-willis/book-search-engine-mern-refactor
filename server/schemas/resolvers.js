@@ -33,7 +33,6 @@ const resolvers = {
         },
         saveBook: async (parent, bookData, context) => {
             if (context.user) {
-                console.log('bookData in server/schemas/resolvers.js: ', bookData);
                 return User
                     .findOneAndUpdate(
                         { _id: context.user._id },
@@ -44,8 +43,6 @@ const resolvers = {
             throw AuthenticationError;
         },
         removeBook: async (parent, {bookId}, context) => {
-            console.log(context.user._id);
-            console.log(bookId);
             if (context.user) {
                 return updatedUser = await User
                     .findOneAndUpdate(
